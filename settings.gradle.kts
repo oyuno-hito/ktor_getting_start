@@ -1,0 +1,1 @@
+rootProject.name = "serverside_fortnite_tool"
