@@ -1,6 +1,7 @@
 package com.example.controller
 
 import io.ktor.application.call
+import io.ktor.auth.*
 import io.ktor.http.HttpStatusCode
 import io.ktor.response.respondText
 import io.ktor.response.respond
@@ -16,8 +17,10 @@ fun Route.helloWorldController() {
         get {
             call.respondText { "Hello World!" }
         }
-        post {
-            call.respond(HttpStatusCode.OK)
+        authenticate("basic") {
+            post {
+                call.respond(HttpStatusCode.OK)
+            }
         }
         put {
             call.respond(HttpStatusCode.BadRequest)
