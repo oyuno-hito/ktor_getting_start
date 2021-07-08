@@ -7,6 +7,7 @@ import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
+import java.io.File
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
 
@@ -28,6 +29,15 @@ fun Application.module(testing: Boolean = false) {
         }
     }
     install(Sessions) {
+
+        // cookie<SampleSession>(
+        //     "SESSION_FEATURE_SESSION_ID",
+        //     // NOTE: ディレクトリにキャッシュ情報を保存する
+        //     // TODO: redisにセッション情報を保存
+        //     directorySessionStorage(File(".sessions"), cached = true)
+        // ) {
+        //     cookie.path = "/" // Specify cookie's path '/' so it can be used in the whole site
+        // }
         cookie<SampleSession>("COOKIE_NAME")
     }
 
