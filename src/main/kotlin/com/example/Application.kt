@@ -5,6 +5,7 @@ import com.example.model.SampleSession
 import io.ktor.server.netty.*
 import io.ktor.application.*
 import io.ktor.auth.*
+import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
 import java.io.File
@@ -23,8 +24,24 @@ fun Application.module(testing: Boolean = false) {
             realm = "Ktor Server"
             // TODO: DBから認証情報の取得
             validate { credentials ->
-                val auth = auths.first { auth -> credentials.name == auth.first }
-                if (credentials.name == auth.first && credentials.password == auth.second) UserIdPrincipal(auth.first) else null
+                val auth = auths.firstOrNull { auth -> credentials.name == auth.first }
+                if (auth != null && credentials.name == auth.first && credentials.password == auth.second) UserIdPrincipal(auth.first) else null
+            }
+        }
+
+        form(name = "form") {
+            // 一意なデータのパラメータ名
+            userParamName = "user"
+            // パスワードのパラメータ名
+            passwordParamName = "password"
+            // 認証失敗時の処理
+            // NOTE 下記ページ内の記法は古いっぽくてエラーが発生したため、よしなに修正
+            // https://jp.ktor.work/servers/features/authentication/basic.html
+            challenge{ call.respond(UnauthorizedResponse()) }
+            validate { credentials ->
+                val auth = auths.firstOrNull { auth -> credentials.name == auth.first }
+                println(auth)
+                if (auth != null && credentials.name == auth.first && credentials.password == auth.second) UserIdPrincipal("user") else null
             }
         }
     }

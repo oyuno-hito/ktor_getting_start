@@ -20,7 +20,7 @@ fun Route.helloWorldController() {
             val name = call.sessions.get<SampleSession>()?.name ?: "guest"
             call.respondText { "Hello $name!" }
         }
-        authenticate("basic") {
+        authenticate("form") {
             post {
                 val principal: UserIdPrincipal? = call.authentication.principal()
                 if (principal?.name != null) {
