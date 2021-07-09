@@ -2,7 +2,6 @@ package com.example.controller
 
 import com.example.model.SampleSession
 import io.ktor.application.call
-import io.ktor.auth.*
 import io.ktor.http.HttpStatusCode
 import io.ktor.response.respondText
 import io.ktor.response.respond
@@ -20,14 +19,8 @@ fun Route.helloWorldController() {
             val name = call.sessions.get<SampleSession>()?.name ?: "guest"
             call.respondText { "Hello $name!" }
         }
-        authenticate("form") {
-            post {
-                val principal: UserIdPrincipal? = call.authentication.principal()
-                if (principal?.name != null) {
-                    call.sessions.set(SampleSession(name = principal.name, value = 0))
-                }
-                call.respond(HttpStatusCode.OK)
-            }
+        post {
+            call.respond(HttpStatusCode.OK)
         }
         put {
             call.respond(HttpStatusCode.BadRequest)
