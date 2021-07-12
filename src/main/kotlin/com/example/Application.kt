@@ -2,12 +2,14 @@ package com.example
 
 import com.example.controller.helloWorldController
 import com.example.controller.scoreController
+import com.example.exception.PathParameterException
 import com.example.model.SampleSession
 import com.fasterxml.jackson.databind.SerializationFeature
 import io.ktor.server.netty.*
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
+import io.ktor.http.*
 import io.ktor.jackson.*
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -65,6 +67,21 @@ fun Application.module(testing: Boolean = false) {
         //     cookie.path = "/" // Specify cookie's path '/' so it can be used in the whole site
         // }
         cookie<SampleSession>("COOKIE_NAME")
+    }
+
+    install(StatusPages) {
+        /**
+         * パスパラメータの型不一致の場合の例外レスポンス
+         */
+        exception<PathParameterException> {
+            call.respond(HttpStatusCode.BadRequest, "PathParameterFormatException")
+        }
+        /**
+         * ハンドリングしていない例外レスポンス
+         */
+        exception<Throwable> { cause->
+            call.respond(HttpStatusCode.InternalServerError, "$cause.message")
+        }
     }
 
     routing {
