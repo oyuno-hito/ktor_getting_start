@@ -1,10 +1,14 @@
 package com.example
 
 import com.example.controller.helloWorldController
+import com.example.controller.scoreController
 import com.example.model.SampleSession
+import com.fasterxml.jackson.databind.SerializationFeature
 import io.ktor.server.netty.*
 import io.ktor.application.*
 import io.ktor.auth.*
+import io.ktor.features.*
+import io.ktor.jackson.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.sessions.*
@@ -15,6 +19,11 @@ fun main(args: Array<String>): Unit = EngineMain.main(args)
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
+    install(ContentNegotiation) {
+        jackson {
+            configure(SerializationFeature.INDENT_OUTPUT, true)
+        }
+    }
     val auths = listOf(
         Pair("taro", "password"),
         Pair("hanako", "password")
@@ -60,5 +69,6 @@ fun Application.module(testing: Boolean = false) {
 
     routing {
         helloWorldController()
+        scoreController()
     }
 }
