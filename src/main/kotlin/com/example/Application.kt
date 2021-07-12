@@ -1,5 +1,6 @@
 package com.example
 
+import com.example.controller.authenticationController
 import com.example.controller.helloWorldController
 import com.example.controller.scoreController
 import com.example.exception.PathParameterException
@@ -85,6 +86,7 @@ fun Application.module(testing: Boolean = false) {
     }
 
     routing {
+        authenticationController()
         helloWorldController()
         scoreController()
     }
